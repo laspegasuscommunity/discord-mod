@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  #Это конфигурация Docker Compose для запуска бота администрирования Discord серверами + веб-интерфейса для его управлением.
+  discord-mod:
+    command: ["-all", "-pa", "-exthttps=true", "-https=false"]
+    container_name: discord-mod
+    deploy:
+      restart_policy:
+        condition: always
+        delay: 5s
+    env_file: mod.env
+    image: teyker/yagpdb:latest
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+      traefik.enable: "true"
+      traefik.http.routers.discord-mod.entrypoints: "websecure"
+      traefik.http.routers.discord-mod.rule: "Host(`discord.${DOMAIN}`)"
+      traefik.http.routers.discord-mod.service: "discord-mod"
+      traefik.http.routers.discord-mod.tls.certresolver: "letsencrypt"
+      traefik.http.services.discord-mod.loadbalancer.server.port: "80"
+    # networks:
+    #   - "default"
+    volumes:
+      - "./mod/cert:/app/cert"
+      - "./mod/soundboard:/app/soundboard"
+
+networks:
+  default:
+    external: true
+    name: $NETWORK
