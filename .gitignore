@@ -1,4 +1,4 @@
 .env
 yagpdb.env
-yagpdb/cert/
-yagpdb/soundboard/
+src/cert/
+src/soundboard/

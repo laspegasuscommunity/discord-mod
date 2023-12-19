@@ -2,9 +2,9 @@ version: "3.8"
 
 services:
   #Это конфигурация Docker Compose для запуска бота администрирования Discord серверами + веб-интерфейса для его управлением.
-  discord-yagpdb:
+  yagpdb:
     command: ["-all", "-pa", "-exthttps=true", "-https=false"]
-    container_name: discord-yagpdb
+    container_name: yagpdb
     deploy:
       restart_policy:
         condition: always
@@ -14,16 +14,16 @@ services:
     labels:
       com.centurylinklabs.watchtower.enable: "true"
       traefik.enable: "true"
-      traefik.http.routers.discord-yagpdb.entrypoints: "websecure"
-      traefik.http.routers.discord-yagpdb.rule: "Host(`discord.${DOMAIN}`)"
-      traefik.http.routers.discord-yagpdb.service: "discord-yagpdb"
-      traefik.http.routers.discord-yagpdb.tls.certresolver: "letsencrypt"
-      traefik.http.services.discord-yagpdb.loadbalancer.server.port: "80"
+      traefik.http.routers.yagpdb.entrypoints: "websecure"
+      traefik.http.routers.yagpdb.rule: "Host(`yagpdb.${DOMAIN}`)"
+      traefik.http.routers.yagpdb.service: "yagpdb"
+      traefik.http.routers.yagpdb.tls.certresolver: "letsencrypt"
+      traefik.http.services.yagpdb.loadbalancer.server.port: "80"
     volumes:
-      - "./yagpdb/cert:/app/cert"
-      - "./yagpdb/soundboard:/app/soundboard"
+      - "./src/cert:/app/cert"
+      - "./src/soundboard:/app/soundboard"
 
 networks:
-  external:
+  default:
     external: true
     name: $NETWORK
